@@ -19,18 +19,13 @@ public File exportOrg(String syscorpid, String depts, String users, String field
     ...
     if (!StrKit.notBlank(depts) && fields.indexOf("efield_dept") == -1) {
         ...
-    } else {
-        ...
-        sql.append(" group by t.id order by t.showorder");
-        if (StrKit.notBlank(depts) && StrKit.notBlank(users)) {
-            models = WxCpUserInfoModel.dao.find(sql.toString(), ToolString.mergeAllSqlParams(new Object[]{syscorpid, ToolString.buildSqlInParams(depts.replaceAll("\\|", ",")), ToolString.buildSqlInParams(users.replaceAll("\\|", ","))}));
-        } else if (StrKit.notBlank(depts)) {
-            models = WxCpUserInfoModel.dao.find(sql.toString(), ToolString.mergeAllSqlParams(new Object[]{syscorpid, ToolString.buildSqlInParams(depts.replaceAll("\\|", ","))}));
-        } else if (StrKit.notBlank(users)) {
+        if (StrKit.notBlank(users)) {
             models = WxCpUserInfoModel.dao.find(sql.toString(), ToolString.mergeAllSqlParams(new Object[]{syscorpid, ToolString.buildSqlInParams(users.replaceAll("\\|", ","))}));
         } else {
             models = WxCpUserInfoModel.dao.find(sql.toString(), new Object[]{syscorpid});
         }
+    } else {
+        ...
     }
 
     return ToolPOI.exportFile(fields.split(","), eFieldMap, "金蝶云之家通讯录", "通讯录", models);
